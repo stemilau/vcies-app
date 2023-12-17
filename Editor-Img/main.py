@@ -9,53 +9,53 @@ from kivy.uix.filechooser import FileChooserListView
 import os
 
 
-class FileExplorerPopup(Popup):
-    def __init__(self, **kwargs):
-        super(FileExplorerPopup, self).__init__(**kwargs)
-        self.title = "Choose a Photo"
-        self.size_hint = (0.9, 0.9)
-        self.file_chooser = FileChooserListView()
-        self.file_chooser.path = os.path.expanduser('~')  # Set initial path to user's home directory
-        self.file_chooser.filters = ['*.png', '*.jpg', '*.jpeg']  # Filter for image files
-        self.file_chooser.bind(selection=self.selected)
-        self.content = self.file_chooser
-
-    def selected(self, chooser, selection):
-        if selection:
-            self.selected_file = selection[0]
-            self.dismiss()
-            self.show_image()
-
-    def show_image(self):
-        if hasattr(self, 'selected_file'):
-            image_layout = BoxLayout(orientation='vertical')
-            image = Image(source=self.selected_file, allow_stretch=True)
-            close_button = Button(text="Close")
-            close_button.bind(on_press=self.dismiss_image)
-            image_layout.add_widget(image)
-            image_layout.add_widget(close_button)
-            self.image_popup = Popup(title="View Image", content=image_layout, size_hint=(0.9, 0.9))
-            self.image_popup.open()
-
-    def dismiss_image(self, instance):
-        self.image_popup.dismiss()
-
-
-class FileExplorerApp(App):
-    def build(self):
-        layout = BoxLayout(orientation='vertical')
-        button = Button(text="Open File Explorer")
-        button.bind(on_press=self.open_file_explorer)
-        layout.add_widget(button)
-        return layout
-
-    def open_file_explorer(self, instance):
-        file_explorer = FileExplorerPopup()
-        file_explorer.open()
-
-
-if __name__ == '__main__':
-    FileExplorerApp().run()
+# class FileExplorerPopup(Popup):
+#     def __init__(self, **kwargs):
+#         super(FileExplorerPopup, self).__init__(**kwargs)
+#         self.title = "Choose a Photo"
+#         self.size_hint = (0.9, 0.9)
+#         self.file_chooser = FileChooserListView()
+#         self.file_chooser.path = os.path.expanduser('~')  # Set initial path to user's home directory
+#         self.file_chooser.filters = ['*.png', '*.jpg', '*.jpeg']  # Filter for image files
+#         self.file_chooser.bind(selection=self.selected)
+#         self.content = self.file_chooser
+#
+#     def selected(self, chooser, selection):
+#         if selection:
+#             self.selected_file = selection[0]
+#             self.dismiss()
+#             self.show_image()
+#
+#     def show_image(self):
+#         if hasattr(self, 'selected_file'):
+#             image_layout = BoxLayout(orientation='vertical')
+#             image = Image(source=self.selected_file, allow_stretch=True)
+#             close_button = Button(text="Close")
+#             close_button.bind(on_press=self.dismiss_image)
+#             image_layout.add_widget(image)
+#             image_layout.add_widget(close_button)
+#             self.image_popup = Popup(title="View Image", content=image_layout, size_hint=(0.9, 0.9))
+#             self.image_popup.open()
+#
+#     def dismiss_image(self, instance):
+#         self.image_popup.dismiss()
+#
+#
+# class FileExplorerApp(App):
+#     def build(self):
+#         layout = BoxLayout(orientation='vertical')
+#         button = Button(text="Open File Explorer")
+#         button.bind(on_press=self.open_file_explorer)
+#         layout.add_widget(button)
+#         return layout
+#
+#     def open_file_explorer(self, instance):
+#         file_explorer = FileExplorerPopup()
+#         file_explorer.open()
+#
+#
+# if __name__ == '__main__':
+#     FileExplorerApp().run()
 
 # # Creăm un obiect Recognizer pentru a efectua recunoașterea vocală
 # recognizer = sr.Recognizer()
@@ -130,3 +130,46 @@ if __name__ == '__main__':
 #
 # if _name_ == "_main_":
 #     recognize_speech()
+
+# aplicarea filtrului alb-negru
+from PIL import Image
+import speech_recognition as sr
+
+def process_image(command):
+    # Încarcă imaginea pe care dorești să aplici filtrul alb-negru
+    img = Image.open("C:/Users/anca2/Desktop/4e45eb7765daa615a06c0f738f5eb125.jpg")
+
+    # Verifică comanda vocală pentru aplicarea filtrului alb-negru
+    if "alb negru" in command.lower():
+        # Converteste imaginea in alb-negru
+        img = img.convert("L")
+        img.show()  # Afișează imaginea modificată în fereastră
+
+        # Salvează imaginea modificată
+        img.save("C:/Users/anca2/Desktop/4e45eb7765daa615a06c0f738f5eb125.jpg")
+        print("Imaginea alb-negru a fost salvată.")
+
+    else:
+        print("Comanda vocală nu a fost recunoscută sau nu este pentru aplicarea filtrului alb-negru.")
+
+def recognize_speech():
+    recognizer = sr.Recognizer()
+
+    with sr.Microphone() as source:
+        print("Ascultă comanda vocală...")
+        audio = recognizer.listen(source)
+
+        try:
+            # Converteste în text comanda vocală utilizând Google Speech Recognition
+            command = recognizer.recognize_google(audio, language='ro-RO')  # Limba română
+
+            print("Comanda vocală recunoscută:", command)
+            process_image(command)
+
+        except sr.UnknownValueError:
+            print("Nu s-a putut recunoaște comanda vocală.")
+        except sr.RequestError as e:
+            print("Eroare în obținerea rezultatelor; {0}".format(e))
+
+if __name__ == "__main__":
+    recognize_speech()
