@@ -77,3 +77,56 @@ if __name__ == '__main__':
 #         print("Eroare în obținerea rezultatelor; {0}".format(e))
 
 
+## editarea luminozitatii
+# import speech_recognition as sr
+# from PIL import Image, ImageEnhance
+#
+# def process_image(command):
+#     # Load the image you want to edit
+#     img = Image.open("D:\\Anul4sem1\\IOM\\free-nature-images.jpg")
+#
+#     # Print the words for debugging
+#     print("Words:", command.split())
+#
+#     # Voice editing commands
+#     if "pateul" in command and ("crește" in command or "scade" in command):
+#         words = command.split()
+#         try:
+#             brightness_index = next(i for i, word in enumerate(words) if word.isdigit() or (word.replace('.', '', 1).isdigit() and '.' in word))
+#             brightness = float(words[brightness_index].replace(",", "."))  # Replace "," with "." for proper float conversion
+#             if "scade" in words:
+#                 brightness = -brightness  # Make the brightness negative for decrease command
+#
+#             enhancer = ImageEnhance.Brightness(img)
+#             img = enhancer.enhance(1.0 + brightness)
+#             img.show()  # Display the modified image
+#         except (ValueError, IndexError):
+#             print("Valoarea luminozității nu este validă.")
+#     else:
+#         print("Comanda vocală nu este recunoscută sau nu conține valoarea luminozității.")
+#
+#     # Save the edited image
+#     img.save("D:\\Anul4sem1\\IOM\\edited_image.jpg")
+#     print("Imagine editată și salvată.")
+#
+# def recognize_speech():
+#     recognizer = sr.Recognizer()
+#
+#     with sr.Microphone() as source:
+#         print("Aștept comanda vocală...")
+#         audio = recognizer.listen(source)
+#
+#         try:
+#             # Use Google Speech Recognition to convert the recording to text
+#             command = recognizer.recognize_google(audio, language='ro-RO')  # Choose the appropriate language
+#
+#             print("Comanda vocală recunoscută:", command)
+#             process_image(command)
+#
+#         except sr.UnknownValueError:
+#             print("Nu s-a putut recunoaște comanda vocală.")
+#         except sr.RequestError as e:
+#             print("Eroare în obținerea rezultatelor; {0}".format(e))
+#
+# if _name_ == "_main_":
+#     recognize_speech()
