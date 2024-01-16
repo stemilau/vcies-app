@@ -1,0 +1,99 @@
+WindowManager:
+    StartWindow:
+    EditingWindow:
+
+<PhotoExplorerPopup@Popup>
+    id: photo_explorer_popup
+    title: ""
+    separator_height: 0
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+        padding: 20
+        spacing: 20
+
+        Image:
+            id: preview_photo
+            source: "Empty.png"
+
+        FileChooserListView:
+            id: file_chooser
+            on_selection: photo_explorer_popup.selected(file_chooser.selection)
+
+        Button:
+            id: select_photo_button
+            pos_hint: {'center_x': 0.5}
+            size_hint: (None, None)
+            height: 80
+            width: 400
+            font_size: 32
+            text: "Select Photo"
+            on_press: root.select_photo_button_press(file_chooser.selection)
+            on_release: app.root.current = "editing_window"
+
+
+<StartWindow>:
+    name: "start_window"
+    canvas.before:
+        Color:
+            rgba: (1,1,1,1)
+        Rectangle:
+            source: 'background.jpg'
+            size: root.width, root.height
+            pos: self.pos
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+
+        BoxLayout:
+            orientation: "vertical"
+            size: root.width, root.height
+
+            Label:
+                text: "VCIES v1.0"
+                bold: True
+                font_size: 100
+                size_hint_y: None
+                height: 200
+
+            Label:
+                text: " Voice Command Image Editing Software "
+                font_size: 32
+                size_hint_y: None
+                height: 10
+
+        BoxLayout:
+            orientation: "horizontal"
+            size: root.width, root.height
+            padding: 80
+
+            Label:
+                text: ""
+            Button:
+                id: start_editing_button
+                size_hint: (None, None)
+                height: 100
+                width: 500
+                text: 'Start Editing'
+                font_size: 40
+                on_press: root.start_editing_button_press()
+            Label:
+                text: ""
+
+
+<EditingWindow>:
+    name: "editing_window"
+    on_enter: self.load_photo()
+    BoxLayout:
+        orientation: "horizontal"
+        size: root.width, root.height
+        padding: 20
+        spacing: 10
+
+        Image:
+            id: target_photo
+            source: "Empty.png"
+
+
