@@ -1,3 +1,4 @@
+
 WindowManager:
     StartWindow:
     EditingWindow:
@@ -19,6 +20,7 @@ WindowManager:
 
         FileChooserListView:
             id: file_chooser
+            path: root.get_default_path()
             on_selection: photo_explorer_popup.selected(file_chooser.selection)
 
         Button:
@@ -86,14 +88,58 @@ WindowManager:
 <EditingWindow>:
     name: "editing_window"
     on_enter: self.load_photo()
+    on_enter: self.add_operation("Loaded Photo")
     BoxLayout:
         orientation: "horizontal"
         size: root.width, root.height
-        padding: 20
-        spacing: 10
+
+        canvas.before:
+            Color:
+                rgba: (0.39,0.39,0.39,1)
+            Rectangle:
+                size: root.width , root.height
 
         Image:
-            id: target_photo
+            id: display_photo
             source: "Empty.png"
+
+        BoxLayout:
+            orientation: "vertical"
+            size_hint: (None, None)
+            size: 500, root.height
+            padding: 10
+            spacing: 10
+            pos: self.parent.pos
+
+            canvas.before:
+                Color:
+                    rgba: (0.25,0.25,0.25,1)
+                Rectangle:
+                    size: 500, root.height
+                    pos: self.pos
+
+            ScrollView:
+                MDList:
+                    id: history
+
+
+            Button:
+                id: listen_button
+                size_hint: (None, None)
+                height: 100
+                width: 500
+                text: 'Listen'
+                font_size: 40
+                on_press: root.listen_and_exec_op()
+
+            Label:
+                id: feedback_label
+                size_hint: (None, None)
+                height: 100
+                width: 500
+                text: 'None'
+                font_size: 25
+
+
 
 
